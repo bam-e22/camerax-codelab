@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import k.t.cameraxsample.LuminosityAnalyzer
+import k.t.cameraxsample.BaseFragment
 import k.t.cameraxsample.R
 import k.t.cameraxsample.databinding.FragmentPreviewBinding
 import timber.log.Timber
@@ -21,7 +23,7 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class PreviewFragment : Fragment() {
+class PreviewFragment : BaseFragment() {
 
     private lateinit var binding: FragmentPreviewBinding
 
@@ -73,13 +75,13 @@ class PreviewFragment : Fragment() {
             imageCapture = ImageCapture.Builder().build()
 
             // Use case: ImageAnalyzer
-            val imageAnalyzer = ImageAnalysis.Builder()
+            /*val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
                     it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
                         Timber.tag("toddtest").d("ImageAnalyzer-Average luminosity: $luma")
                     })
-                }
+                }*/
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -94,7 +96,7 @@ class PreviewFragment : Fragment() {
                     cameraSelector,
                     preview,
                     imageCapture,
-                    imageAnalyzer
+                    //imageAnalyzer
                 )
             } catch (e: Exception) {
                 Timber.e(e, "Use case binding failed")

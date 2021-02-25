@@ -3,19 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/permissionFragment">
+    app:startDestination="@id/previewFragment">
 
     <fragment
         android:id="@+id/permissionFragment"
         android:name="k.t.cameraxsample.permission.PermissionFragment"
         android:label="PermissionFragment"
-        tools:layout="@layout/fragment_permission">
-
-        <action
-            android:id="@+id/action_permission_to_preview"
-            app:destination="@id/previewFragment" />
-
-    </fragment>
+        tools:layout="@layout/fragment_permission" />
 
     <fragment
         android:id="@+id/previewFragment"
