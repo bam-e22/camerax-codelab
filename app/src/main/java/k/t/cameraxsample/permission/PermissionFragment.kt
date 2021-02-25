@@ -17,14 +17,6 @@ import timber.log.Timber
 
 class PermissionFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (!requireContext().allPermissionGranted()) {
-            requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,6 +26,14 @@ class PermissionFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_permission, container, false)
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (!requireContext().allPermissionGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
+        }
     }
 
     private val requestPermissionLauncher = registerForActivityResult(
