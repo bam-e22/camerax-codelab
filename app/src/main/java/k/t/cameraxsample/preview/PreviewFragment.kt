@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class PreviewFragment : BaseFragment() {
-
     private lateinit var binding: FragmentPreviewBinding
 
     private var imageCapture: ImageCapture? = null
@@ -37,7 +36,6 @@ class PreviewFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_preview, container, false)
 
         outputDirectory = getOutputDirectory()

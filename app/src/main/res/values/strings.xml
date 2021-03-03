@@ -2,6 +2,6 @@
     <string name="app_name">CameraXSample</string>
     <string name="btn_take_photo">Take Photo</string>
     <string name="menu_preview">preview</string>
-    <string name="menu_analysis">analysis</string>
+    <string name="menu_recognize">recognize</string>
     <string name="permission_not_granted">Permission not granted</string>
 </resources>

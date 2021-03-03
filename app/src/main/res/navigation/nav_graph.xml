@@ -16,5 +16,9 @@
         android:name="k.t.cameraxsample.preview.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview" />
+    <fragment
+        android:id="@+id/recognizeFragment"
+        android:name="k.t.cameraxsample.analyzer.RecognizeFragment"
+        android:label="RecognizeFragment" />
 
 </navigation>
