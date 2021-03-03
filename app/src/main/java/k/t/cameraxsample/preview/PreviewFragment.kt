@@ -38,6 +38,8 @@ class PreviewFragment : BaseFragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_preview, container, false)
 
+        activity?.title = "Preview"
+
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -77,7 +79,7 @@ class PreviewFragment : BaseFragment() {
                 .build()
                 .also {
                     it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                        Timber.tag("toddtest").d("ImageAnalyzer-Average luminosity: $luma")
+                        Timber.d("ImageAnalyzer-Average luminosity: $luma")
                     })
                 }*/
 

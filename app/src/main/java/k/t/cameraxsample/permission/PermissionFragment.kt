@@ -25,6 +25,8 @@ class PermissionFragment : Fragment() {
         val binding: FragmentPermissionBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_permission, container, false)
 
+        activity?.title = "Permission"
+
         return binding.root
     }
 
@@ -40,7 +42,7 @@ class PermissionFragment : Fragment() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { isGranted ->
         val isAllGranted = isGranted.all { it.value }
-        Timber.tag("toddtest").d("isGranted? $isGranted")
+        Timber.d("isGranted? $isGranted")
 
         if (isAllGranted) {
             findNavController().popBackStack()

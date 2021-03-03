@@ -45,11 +45,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Timber.tag("toddtest").d("onOptionItemSelected: $item")
-        return super.onOptionsItemSelected(item)
-    }
-
     companion object {
         /** Combination of all flags required to put activity into immersive mode */
         @Suppress("DEPRECATION")
