@@ -1,4 +1,4 @@
-package k.t.cameraxsample.preview
+package k.t.cameraxsample.fragments.preview
 
 import android.net.Uri
 import android.os.Bundle
@@ -37,8 +37,6 @@ class PreviewFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_preview, container, false)
-
-        activity?.title = "Preview"
 
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()

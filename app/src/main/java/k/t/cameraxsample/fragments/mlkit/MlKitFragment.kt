@@ -1,4 +1,4 @@
-package k.t.cameraxsample.analyzer
+package k.t.cameraxsample.fragments.mlkit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,9 +16,9 @@ import k.t.cameraxsample.R
 import k.t.cameraxsample.databinding.FragmentRecognizeBinding
 import timber.log.Timber
 
-class RecognizeFragment : BaseFragment() {
+class MlKitFragment : BaseFragment() {
     private lateinit var binding: FragmentRecognizeBinding
-    private val viewModel: RecognizeViewModel by viewModels()
+    private val viewModel: MlKitViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,8 +26,6 @@ class RecognizeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recognize, container, false)
-
-        activity?.title = "Recognize"
 
         startCamera()
 

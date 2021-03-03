@@ -1,4 +1,4 @@
-package k.t.cameraxsample.permission
+package k.t.cameraxsample.fragments.permission
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,8 +24,6 @@ class PermissionFragment : Fragment() {
     ): View {
         val binding: FragmentPermissionBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_permission, container, false)
-
-        activity?.title = "Permission"
 
         return binding.root
     }

@@ -7,5 +7,5 @@
     <item
         android:id="@+id/recognizeFragment"
         android:icon="@drawable/ic_baseline_analytics"
-        android:title="@string/menu_recognize" />
+        android:title="@string/menu_mlkit" />
 </menu>

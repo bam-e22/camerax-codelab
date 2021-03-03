@@ -7,18 +7,18 @@
 
     <fragment
         android:id="@+id/permissionFragment"
-        android:name="k.t.cameraxsample.permission.PermissionFragment"
+        android:name="k.t.cameraxsample.fragments.permission.PermissionFragment"
         android:label="PermissionFragment"
         tools:layout="@layout/fragment_permission" />
 
     <fragment
         android:id="@+id/previewFragment"
-        android:name="k.t.cameraxsample.preview.PreviewFragment"
+        android:name="k.t.cameraxsample.fragments.preview.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview" />
     <fragment
         android:id="@+id/recognizeFragment"
-        android:name="k.t.cameraxsample.analyzer.RecognizeFragment"
+        android:name="k.t.cameraxsample.fragments.mlkit.MlKitFragment"
         android:label="RecognizeFragment" />
 
 </navigation>
