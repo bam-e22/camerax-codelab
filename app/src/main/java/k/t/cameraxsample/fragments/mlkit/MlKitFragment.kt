@@ -9,27 +9,53 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import k.t.cameraxsample.BaseFragment
 import k.t.cameraxsample.R
-import k.t.cameraxsample.databinding.FragmentRecognizeBinding
+import k.t.cameraxsample.databinding.FragmentMlkitBinding
 import timber.log.Timber
 
 class MlKitFragment : BaseFragment() {
-    private lateinit var binding: FragmentRecognizeBinding
-    private val viewModel: MlKitViewModel by viewModels()
+    private lateinit var binding: FragmentMlkitBinding
+    private lateinit var viewModel: MlKitViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recognize, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mlkit, container, false)
 
-        startCamera()
+        var lensFacing = CameraSelector.LENS_FACING_BACK
+        var selectedModel = AnalyzeModel.FACE_DETECTION
+
+        if (savedInstanceState != null) {
+            savedInstanceState.getParcelable<AnalyzeModel>(STATE_SELECTED_MODEL)?.let {
+                selectedModel = it
+            }
+
+            lensFacing = savedInstanceState.getInt(STATE_LENS_FACING, CameraSelector.LENS_FACING_BACK)
+        }
+
+        viewModel = ViewModelProvider(this, MlKitViewModelFactory(requireActivity().application, lensFacing, selectedModel))
+            .get(MlKitViewModel::class.java)
+
+        binding.mlKitViewModel = viewModel
+        binding.lifecycleOwner = this
+
+        viewModel.initializeCamera().observe(viewLifecycleOwner, { initialized ->
+            if (initialized) {
+                viewModel.onInitialized()
+                startCamera()
+            }
+        })
 
         return binding.root
+    }
+
+    private fun bindAllCameraUseCase() {
+        // TODO
     }
 
     private fun startCamera() {
@@ -46,9 +72,6 @@ class MlKitFragment : BaseFragment() {
                     it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 }
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             // Face detection
             val highAccuracyOpts = FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
@@ -64,7 +87,7 @@ class MlKitFragment : BaseFragment() {
 
                 cameraProvider.bindToLifecycle(
                     this,
-                    cameraSelector,
+                    viewModel.cameraSelector,
                     preview
                 )
             } catch (e: Exception) {
@@ -72,5 +95,22 @@ class MlKitFragment : BaseFragment() {
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bindAllCameraUseCase()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putParcelable(STATE_SELECTED_MODEL, viewModel.selectedModel)
+        outState.putInt(STATE_LENS_FACING, viewModel.lensFacing)
+    }
+
+    companion object {
+        private const val STATE_SELECTED_MODEL = "STATE_SELECTED_MODEL"
+        private const val STATE_LENS_FACING = "STATE_LENS_FACING"
     }
 }
