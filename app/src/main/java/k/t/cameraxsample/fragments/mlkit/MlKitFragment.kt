@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -15,6 +17,7 @@ import k.t.cameraxsample.BaseFragment
 import k.t.cameraxsample.R
 import k.t.cameraxsample.databinding.FragmentMlkitBinding
 import timber.log.Timber
+import java.util.*
 
 class MlKitFragment : BaseFragment() {
     private lateinit var binding: FragmentMlkitBinding
@@ -50,6 +53,24 @@ class MlKitFragment : BaseFragment() {
                 startCamera()
             }
         })
+
+        val spinnerDataAdapter = ArrayAdapter(requireContext(), R.layout.spinner_style, viewModel.analyzedModelList)
+        spinnerDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinner.adapter = spinnerDataAdapter
+        binding.spinner.setSelection(viewModel.analyzedModelList.indexOf(selectedModel))
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedAnalyzedModel = viewModel.analyzedModelList[position]
+                Timber.d("item selected[$position, $id]: $selectedAnalyzedModel")
+                if (selectedAnalyzedModel != viewModel.selectedModel) {
+                    viewModel.onAnalyzeModelChanged(selectedAnalyzedModel)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // do nothing
+            }
+        }
 
         return binding.root
     }

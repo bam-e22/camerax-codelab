@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import java.util.*
 import java.util.concurrent.ExecutionException
 
 class MlKitViewModel(application: Application, var lensFacing: Int, selectedMode: AnalyzeModel) : AndroidViewModel(application) {
@@ -21,6 +22,8 @@ class MlKitViewModel(application: Application, var lensFacing: Int, selectedMode
 
     var cameraProvider: ProcessCameraProvider? = null
         private set
+
+    val analyzedModelList = EnumSet.allOf(AnalyzeModel::class.java).toList()
 
     fun initializeCamera(): LiveData<Boolean> {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(getApplication())
@@ -71,6 +74,11 @@ class MlKitViewModel(application: Application, var lensFacing: Int, selectedMode
 
         Timber.e("This device does not have lens with facing: $newLensFacing")
     }
+
+    fun onAnalyzeModelChanged(analyzeModel: AnalyzeModel) {
+        selectedModel = analyzeModel
+        Timber.d("analyzeModel changed: $selectedModel")
+    }
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -85,5 +93,5 @@ class MlKitViewModelFactory(
 
 @Parcelize
 enum class AnalyzeModel : Parcelable {
-    FACE_DETECTION
+    FACE_DETECTION, OBJECT_DETECTION
 }
