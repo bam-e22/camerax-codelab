@@ -8,16 +8,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.mlkit.vision.face.FaceDetectorOptions
+import androidx.navigation.fragment.findNavController
 import k.t.cameraxsample.BaseFragment
+import k.t.cameraxsample.LaunchSource
 import k.t.cameraxsample.R
 import k.t.cameraxsample.databinding.FragmentMlkitBinding
 import timber.log.Timber
-import java.util.*
 
 class MlKitFragment : BaseFragment() {
     private lateinit var binding: FragmentMlkitBinding
@@ -50,7 +48,7 @@ class MlKitFragment : BaseFragment() {
         viewModel.initializeCamera().observe(viewLifecycleOwner, { initialized ->
             if (initialized) {
                 viewModel.onInitialized()
-                startCamera()
+                bindAllCameraUseCase()
             }
         })
 
@@ -72,50 +70,45 @@ class MlKitFragment : BaseFragment() {
             }
         }
 
+        binding.btnSetting.setOnClickListener {
+            val action = MlKitFragmentDirections.actionMlKitFragmentToSettingActivity(LaunchSource.ML_KIT)
+            findNavController().navigate(action)
+        }
+
         return binding.root
     }
 
     private fun bindAllCameraUseCase() {
-        // TODO
+        viewModel.cameraProvider?.unbindAll()
+        bindPreviewUseCase()
+        bindAnalysisUseCase()
     }
 
-    private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+    private fun bindPreviewUseCase() {
+        if (viewModel.cameraProvider == null) {
+            return
+        }
 
-        cameraProviderFuture.addListener({
-            // Used to bind the lifecycle of cameras to the lifecycle owner
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-            // Use case: Preview
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-                }
-
-            // Face detection
-            val highAccuracyOpts = FaceDetectorOptions.Builder()
-                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-                .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
-                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
-                .build()
-
-            try {
-                // Unbind use cases before rebinding
-                cameraProvider.unbindAll()
-
-                // Bind use cases to camera
-
-                cameraProvider.bindToLifecycle(
-                    this,
-                    viewModel.cameraSelector,
-                    preview
-                )
-            } catch (e: Exception) {
-                Timber.e(e, "Use case binding failed")
+        // TODO: resolution 설정
+        val preview = Preview.Builder()
+            .build()
+            .also {
+                it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
             }
 
-        }, ContextCompat.getMainExecutor(requireContext()))
+        try {
+            viewModel.cameraProvider?.bindToLifecycle(
+                this,
+                viewModel.cameraSelector,
+                preview
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Preview use case binding failed")
+        }
+    }
+
+    private fun bindAnalysisUseCase() {
+
     }
 
     override fun onResume() {

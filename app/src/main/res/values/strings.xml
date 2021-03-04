@@ -5,4 +5,11 @@
     <string name="menu_mlkit">ML Kit</string>
     <string name="permission_not_granted">Permission not granted</string>
     <string name="menu_item_settings">Settings</string>
+    <string name="pref_category_key_camera" translatable="false">pckc</string>
+    <string name="pref_category_title_camera">Camera</string>
+    <string name="pref_key_camerax_rear_camera_target_resolution" translatable="false">crctas</string>
+    <string name="pref_key_camerax_front_camera_target_resolution" translatable="false">cfctas</string>
+    <string name="pref_title_camerax_rear_camera_target_resolution">CameraX rear camera target resolution</string>
+    <string name="pref_title_camerax_front_camera_target_resolution">CameraX front camera target resolution</string>
+
 </resources>

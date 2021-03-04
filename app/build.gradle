@@ -71,5 +71,9 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // bundled model
-    implementation 'com.google.mlkit:face-detection:16.0.4'
+    implementation 'com.google.mlkit:face-detection:16.0.5'
+
+    // preference
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+
 }

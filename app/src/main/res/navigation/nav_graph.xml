@@ -16,9 +16,27 @@
         android:name="k.t.cameraxsample.fragments.preview.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview" />
+
     <fragment
-        android:id="@+id/recognizeFragment"
+        android:id="@+id/mlKitFragment"
         android:name="k.t.cameraxsample.fragments.mlkit.MlKitFragment"
-        android:label="RecognizeFragment" />
+        android:label="ML Kit Fragment">
+
+        <action
+            android:id="@+id/action_mlKitFragment_to_settingActivity"
+            app:destination="@id/settingActivity" />
+
+    </fragment>
+
+    <activity
+        android:id="@+id/settingActivity"
+        android:name="k.t.cameraxsample.SettingActivity"
+        android:label="SettingActivity">
+
+        <argument
+            android:name="launchSource"
+            app:argType="k.t.cameraxsample.LaunchSource" />
+
+    </activity>
 
 </navigation>
