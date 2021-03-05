@@ -15,6 +15,7 @@ import k.t.cameraxsample.BaseFragment
 import k.t.cameraxsample.LaunchSource
 import k.t.cameraxsample.R
 import k.t.cameraxsample.databinding.FragmentMlkitBinding
+import k.t.cameraxsample.utils.getCameraXTargetResolution
 import timber.log.Timber
 
 class MlKitFragment : BaseFragment() {
@@ -89,8 +90,13 @@ class MlKitFragment : BaseFragment() {
             return
         }
 
-        // TODO: resolution 설정
-        val preview = Preview.Builder()
+        val previewBuilder = Preview.Builder()
+        val targetResolution = getCameraXTargetResolution(requireContext(), viewModel.lensFacing)
+        if (targetResolution != null) {
+            previewBuilder.setTargetResolution(targetResolution)
+        }
+
+        val preview = previewBuilder
             .build()
             .also {
                 it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
