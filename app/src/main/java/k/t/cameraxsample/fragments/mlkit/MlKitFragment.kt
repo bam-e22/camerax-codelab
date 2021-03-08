@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.databinding.DataBindingUtil
@@ -114,6 +115,24 @@ class MlKitFragment : BaseFragment() {
     }
 
     private fun bindAnalysisUseCase() {
+        if (viewModel.cameraProvider == null) {
+            return
+        }
+
+        try {
+            when (viewModel.selectedModel) {
+                AnalyzeModel.FACE_DETECTION -> {
+                    Timber.i("Using face detector processor")
+
+                }
+                else -> throw IllegalArgumentException("Invalid model")
+            }
+
+        } catch (e: Exception) {
+            Timber.e(e)
+            Toast.makeText(requireContext(), "Can not create image processor: " + e.localizedMessage, Toast.LENGTH_LONG).show()
+            return
+        }
 
     }
 
