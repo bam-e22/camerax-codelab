@@ -7,6 +7,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
+import k.t.cameraxsample.analyzer.VisionImageProcessor
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.*
@@ -24,6 +25,8 @@ class MlKitViewModel(application: Application, var lensFacing: Int, selectedMode
         private set
 
     val analyzedModelList = EnumSet.allOf(AnalyzeModel::class.java).toList()
+
+    var imageProcessor: VisionImageProcessor? = null
 
     fun initializeCamera(): LiveData<Boolean> {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(getApplication())

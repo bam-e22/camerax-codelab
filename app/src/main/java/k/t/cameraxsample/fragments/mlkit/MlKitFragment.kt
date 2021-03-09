@@ -8,15 +8,20 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import k.t.cameraxsample.BaseFragment
 import k.t.cameraxsample.LaunchSource
 import k.t.cameraxsample.R
+import k.t.cameraxsample.analyzer.mlkit.FaceDetectorProcessor
 import k.t.cameraxsample.databinding.FragmentMlkitBinding
 import k.t.cameraxsample.utils.getCameraXTargetResolution
+import k.t.cameraxsample.utils.getFaceDetectorOptions
 import timber.log.Timber
 
 class MlKitFragment : BaseFragment() {
@@ -119,11 +124,17 @@ class MlKitFragment : BaseFragment() {
             return
         }
 
-        try {
+        if (viewModel.imageProcessor != null) {
+            viewModel.imageProcessor?.stop()
+        }
+
+        viewModel.imageProcessor = try {
             when (viewModel.selectedModel) {
                 AnalyzeModel.FACE_DETECTION -> {
                     Timber.i("Using face detector processor")
 
+                    val faceDetectorOptions = getFaceDetectorOptions(requireContext())
+                    FaceDetectorProcessor(requireContext(), faceDetectorOptions)
                 }
                 else -> throw IllegalArgumentException("Invalid model")
             }
@@ -134,11 +145,38 @@ class MlKitFragment : BaseFragment() {
             return
         }
 
+        val builder = ImageAnalysis.Builder()
+        val targetResolution = getCameraXTargetResolution(requireContext(), viewModel.lensFacing)
+        if (targetResolution != null) {
+            builder.setTargetResolution(targetResolution)
+        }
+
+        val analysisUseCase = builder.build()
+        analysisUseCase.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
+            try {
+                viewModel.imageProcessor?.processImageProxy(imageProxy, binding.graphicOverlay)
+            } catch (e: Exception) {
+                Timber.e(e)
+                val msg = "Failed to process image. Error: ${e.localizedMessage}"
+                Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        try {
+            viewModel.cameraProvider?.bindToLifecycle(this, viewModel.cameraSelector, analysisUseCase)
+        } catch (e: Exception) {
+            Timber.e(e, "Analysis use case binding failed")
+        }
     }
 
     override fun onResume() {
         super.onResume()
         bindAllCameraUseCase()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.imageProcessor?.stop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

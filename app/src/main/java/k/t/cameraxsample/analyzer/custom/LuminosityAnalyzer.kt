@@ -1,4 +1,4 @@
-package k.t.cameraxsample.analyzer
+package k.t.cameraxsample.analyzer.custom
 
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy

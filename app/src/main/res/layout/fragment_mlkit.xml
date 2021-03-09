@@ -41,6 +41,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <k.t.cameraxsample.graphics.GraphicOverlay
+            android:id="@+id/graphicOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="0dp"
