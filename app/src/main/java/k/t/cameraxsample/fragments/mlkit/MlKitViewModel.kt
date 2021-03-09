@@ -28,6 +28,8 @@ class MlKitViewModel(application: Application, var lensFacing: Int, selectedMode
 
     var imageProcessor: VisionImageProcessor? = null
 
+    var needUpdateGraphicOverlayImageSourceInfo = false
+
     fun initializeCamera(): LiveData<Boolean> {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(getApplication())
         cameraProviderFuture.addListener({

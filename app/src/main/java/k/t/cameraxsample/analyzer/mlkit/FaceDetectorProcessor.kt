@@ -38,6 +38,7 @@ class FaceDetectorProcessor(context: Context, detectorOptions: FaceDetectorOptio
     override fun onSuccess(results: List<Face>, graphicOverlay: GraphicOverlay) {
         results.forEachIndexed { index, face ->
             Timber.d("face[$index]= $face")
+            graphicOverlay.add(FaceGraphic(graphicOverlay, face))
         }
     }
 

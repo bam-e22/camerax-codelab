@@ -12,7 +12,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import k.t.cameraxsample.BaseFragment
@@ -151,8 +150,22 @@ class MlKitFragment : BaseFragment() {
             builder.setTargetResolution(targetResolution)
         }
 
+        viewModel.needUpdateGraphicOverlayImageSourceInfo = true
+
         val analysisUseCase = builder.build()
         analysisUseCase.setAnalyzer(ContextCompat.getMainExecutor(requireContext())) { imageProxy ->
+            if (viewModel.needUpdateGraphicOverlayImageSourceInfo) {
+                val isImageFlipped = viewModel.lensFacing == CameraSelector.LENS_FACING_FRONT
+                val rotationDegree = imageProxy.imageInfo.rotationDegrees
+
+                if (rotationDegree == 0 || rotationDegree == 180) {
+                    binding.graphicOverlay.setImageSourceInfo(imageProxy.width, imageProxy.height, isImageFlipped)
+                } else {
+                    binding.graphicOverlay.setImageSourceInfo(imageProxy.height, imageProxy.width, isImageFlipped)
+                }
+
+                viewModel.needUpdateGraphicOverlayImageSourceInfo = false
+            }
             try {
                 viewModel.imageProcessor?.processImageProxy(imageProxy, binding.graphicOverlay)
             } catch (e: Exception) {

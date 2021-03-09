@@ -2,10 +2,8 @@ package k.t.cameraxsample.graphics
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Matrix
 import android.util.AttributeSet
 import android.view.View
-import timber.log.Timber
 import java.util.*
 
 /**
@@ -37,8 +35,6 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
     private val lock = Any()
     private val graphics: MutableList<Graphic> = ArrayList()
 
-    // Matrix for transforming from image coordinates to overlay view coordinates.
-    private val transformationMatrix = Matrix()
     private var imageWidth = 0
     private var imageHeight = 0
 
@@ -98,14 +94,6 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
         postInvalidate()
     }
 
-    fun getImageWidth(): Int {
-        return imageWidth
-    }
-
-    fun getImageHeight(): Int {
-        return imageHeight
-    }
-
     private fun updateTransformationIfNeeded() {
         if (!needUpdateTransformation || imageWidth <= 0 || imageHeight <= 0) {
             return
@@ -123,12 +111,7 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
             scaleFactor = height.toFloat() / imageHeight
             postScaleWidthOffset = (height.toFloat() * imageAspectRatio - width) / 2
         }
-        transformationMatrix.reset()
-        transformationMatrix.setScale(scaleFactor, scaleFactor)
-        transformationMatrix.postTranslate(-postScaleWidthOffset, -postScaleHeightOffset)
-        if (isImageFlipped) {
-            transformationMatrix.postScale(-1f, 1f, width / 2f, height / 2f)
-        }
+
         needUpdateTransformation = false
     }
 
@@ -169,14 +152,6 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
             return imagePixel * overlay.scaleFactor
         }
 
-        /** Returns the application context of the app.  */
-        val applicationContext: Context
-            get() = overlay.context.applicationContext
-
-        fun isImageFlipped(): Boolean {
-            return overlay.isImageFlipped
-        }
-
         /**
          * Adjusts the x coordinate from the image's coordinate system to the view coordinate system.
          */
@@ -194,16 +169,5 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
         fun translateY(y: Float): Float {
             return scale(y) - overlay.postScaleHeightOffset
         }
-
-        /**
-         * Returns a [Matrix] for transforming from image coordinates to overlay view coordinates.
-         */
-        fun getTransformationMatrix(): Matrix {
-            return overlay.transformationMatrix
-        }
-
-        fun postInvalidate() {
-            overlay.postInvalidate()
-        }
-    }
+    } // ~Graphic
 }
