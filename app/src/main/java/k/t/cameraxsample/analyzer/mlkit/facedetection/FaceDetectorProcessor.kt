@@ -1,4 +1,4 @@
-package k.t.cameraxsample.analyzer.mlkit
+package k.t.cameraxsample.analyzer.mlkit.facedetection
 
 import android.content.Context
 import com.google.android.gms.tasks.Task
@@ -7,6 +7,7 @@ import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetector
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import k.t.cameraxsample.analyzer.mlkit.VisionProcessorBase
 import k.t.cameraxsample.graphics.GraphicOverlay
 import timber.log.Timber
 

@@ -47,6 +47,12 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
         return detectInImage(inputImage)
             .addOnSuccessListener(executor) { results: T ->
                 graphicOverlay.clear()
+
+                // InputImageSize
+                // FPS
+                // Frame latency
+                // Detector latency
+
                 this@VisionProcessorBase.onSuccess(results, graphicOverlay)
                 graphicOverlay.postInvalidate()
             }

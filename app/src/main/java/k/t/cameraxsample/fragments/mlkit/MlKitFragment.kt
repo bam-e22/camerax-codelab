@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import k.t.cameraxsample.BaseFragment
 import k.t.cameraxsample.LaunchSource
 import k.t.cameraxsample.R
-import k.t.cameraxsample.analyzer.mlkit.FaceDetectorProcessor
+import k.t.cameraxsample.analyzer.mlkit.facedetection.FaceDetectorProcessor
 import k.t.cameraxsample.databinding.FragmentMlkitBinding
 import k.t.cameraxsample.utils.getCameraXTargetResolution
 import k.t.cameraxsample.utils.getFaceDetectorOptions

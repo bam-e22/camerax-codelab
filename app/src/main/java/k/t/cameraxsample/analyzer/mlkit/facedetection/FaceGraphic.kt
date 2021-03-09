@@ -1,4 +1,4 @@
-package k.t.cameraxsample.analyzer.mlkit
+package k.t.cameraxsample.analyzer.mlkit.facedetection
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -42,8 +42,6 @@ class FaceGraphic constructor(overlay: GraphicOverlay, private val face: Face) :
 
     /** Draws the face annotations for position on the supplied canvas.  */
     override fun draw(canvas: Canvas) {
-        // Draws a circle at the position of the detected face, with the face's track id below.
-
         // Draws a circle at the position of the detected face, with the face's track id below.
         val x = translateX(face.boundingBox.centerX().toFloat())
         val y = translateY(face.boundingBox.centerY().toFloat())
