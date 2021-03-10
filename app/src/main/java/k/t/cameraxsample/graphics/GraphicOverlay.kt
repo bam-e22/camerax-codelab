@@ -35,8 +35,11 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
     private val lock = Any()
     private val graphics: MutableList<Graphic> = ArrayList()
 
-    private var imageWidth = 0
-    private var imageHeight = 0
+    var imageWidth = 0
+        private set
+
+    var imageHeight = 0
+        private set
 
     // The factor of overlay View size to image size. Anything in the image coordinates need to be
     // scaled by this amount to fit with the area of overlay View.
@@ -131,7 +134,7 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
      * this and implement the [Graphic.draw] method to define the graphics element. Add
      * instances to the overlay using [GraphicOverlay.add].
      */
-    abstract class Graphic(private val overlay: GraphicOverlay) {
+    abstract class Graphic(val overlay: GraphicOverlay) {
         /**
          * Draw the graphic on the supplied canvas. Drawing should use the following methods to convert
          * to view coordinates for the graphics that are drawn:
@@ -168,6 +171,10 @@ class GraphicOverlay(context: Context, attrs: AttributeSet) : View(context, attr
          */
         fun translateY(y: Float): Float {
             return scale(y) - overlay.postScaleHeightOffset
+        }
+
+        fun postInvalidate() {
+            overlay.postInvalidate()
         }
     } // ~Graphic
 }
